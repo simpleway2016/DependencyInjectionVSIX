@@ -105,7 +105,17 @@ namespace DependencyInjectionVSIX
                 TextDocument textDoc = (TextDocument)doc.Object("");
 
                 var classCode = (CodeClass)textDoc.Selection.ActivePoint.CodeElement[vsCMElement.vsCMElementClass];
-                
+                if(classCode == null)
+                {
+                    VsShellUtilities.ShowMessageBox(
+               this.package,
+               "请把光标定在class代码内部",
+               "提示",
+               OLEMSGICON.OLEMSGICON_WARNING,
+               OLEMSGBUTTON.OLEMSGBUTTON_OK,
+               OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                    return;
+                }
                 string classname = classCode.Name;
 
                 foreach (CodeElement member in classCode.Members)
