@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -103,6 +105,7 @@ namespace DependencyInjectionVSIX
                 TextDocument textDoc = (TextDocument)doc.Object("");
 
                 var classCode = (CodeClass)textDoc.Selection.ActivePoint.CodeElement[vsCMElement.vsCMElementClass];
+                
                 string classname = classCode.Name;
 
                 foreach (CodeElement member in classCode.Members)
@@ -141,11 +144,8 @@ namespace DependencyInjectionVSIX
                 if (member.Kind == vsCMElement.vsCMElementVariable )
                 {
                     CodeVariable field = (CodeVariable)member;
-                    if(field.Type == fieldType)
-                    {
-                        if (field.Name.ToLower() == "_" + fieldName.ToLower())
-                            return true;
-                    }
+                    if (field.Name.ToLower() == "_" + fieldName.ToLower())
+                        return true;
                 }
             }
             return false;
@@ -175,7 +175,26 @@ namespace DependencyInjectionVSIX
                 point.Insert($"this.{fieldName} = {p.Name};\r\n");
 
                 point = func.StartPoint.CreateEditPoint();
-                point.Insert($"{p.Type.CodeType.Name} {fieldName};\r\n");
+                var typeString = p.Type.AsString;
+                try
+                {
+                    while (true)
+                    {
+                       var match = Regex.Match(typeString, @"[\w|\.]+\.[\w|\.]+");
+                        if(match.Length > 0)
+                        {
+                            typeString = typeString.Replace(match.Value, match.Value.Split('.').LastOrDefault());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch
+                {
+                }
+                point.Insert($"{typeString} {fieldName};\r\n");
             }
 
             classCode.StartPoint.CreateEditPoint().SmartFormat(func.EndPoint);
