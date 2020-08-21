@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="DependencyInjectionVSIX.1fdfb53b-7779-4528-b12b-5fff571e4bfb" Version="1.0.0.2" Language="en-US" Publisher="RunYu2014" />
+        <Identity Id="DependencyInjectionVSIX.1fdfb53b-7779-4528-b12b-5fff571e4bfb" Version="1.0.0.3" Language="en-US" Publisher="RunYu2014" />
         <DisplayName>DependencyInjectionVSIX</DisplayName>
         <Description>Empty VSIX Project.</Description>
     </Metadata>

@@ -170,7 +170,7 @@ namespace DependencyInjectionVSIX
             {
                 if( hasField(classCode,p.Name , p.Type) == false)
                 {
-                    parameters.Add(p);
+                    parameters.Insert(0,p);
                    
                 }
             }
@@ -179,12 +179,10 @@ namespace DependencyInjectionVSIX
             {
                 var fieldName = "_" + p.Name.Substring(0, 1).ToLower() + (p.Name.Length > 1 ? p.Name.Substring(1) : "");
                 //添加依赖注入
-                var point = func.EndPoint.CreateEditPoint();
-
-                point.CharLeft(1);
+                var point = func.GetStartPoint( vsCMPart.vsCMPartBody).CreateEditPoint();
                 point.Insert($"this.{fieldName} = {p.Name};\r\n");
-
-                point = func.StartPoint.CreateEditPoint();
+                                
+                point = classCode.GetStartPoint( vsCMPart.vsCMPartBody).CreateEditPoint();
                 var typeString = p.Type.AsString;
                 try
                 {
